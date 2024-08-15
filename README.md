@@ -1,23 +1,33 @@
-# Biplot Analysis with PCA in R
+# PCA Biplot Analysis Tools
 
 ## Overview
-This repository contains an R script for performing PCA and generating a biplot that includes both data points and variable loadings. This is particularly useful for visualizing the contribution of each variable to the principal components in a dataset.
+This repository provides tools for performing PCA and generating biplots in both R and Python. These scripts are designed to help visualize the influence of variables on the principal components of a dataset, suitable for exploratory data analysis in fields such as genetics, economics, and more.
 
 ## Features
-- **PCA Computation**: Calculates principal components using the provided dataset.
-- **Biplot Visualization**: Visualizes both the scores and loadings in a single plot, enhancing interpretability of PCA results.
+- **PCA Calculation**: Both scripts calculate principal components using standardized data.
+- **Biplot Visualization**: Visualizes data points along with variable loadings to interpret the PCA results.
 
 ## Getting Started
 
 ### Prerequisites
+For R:
 - R environment (RStudio recommended)
-- Required libraries: `tidyverse`, `FactoMineR`, `factoextra`, `psych`, `REdaS`
+- Libraries: `tidyverse`, `FactoMineR`, `factoextra`, `psych`, `REdaS`
+
+For Python:
+- Python 3.x
+- Libraries: `pandas`, `matplotlib`, `scikit-learn`, `numpy`
 
 ### Installation
-Install the required R packages using the following commands:
+#### R
 ```R
 install.packages("tidyverse")
 install.packages("FactoMineR")
 install.packages("factoextra")
 install.packages("psych")
 install.packages("REdaS")
+```
+### Python
+```R
+pip install pandas matplotlib scikit-learn numpy
+```
