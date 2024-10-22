@@ -1,0 +1,108 @@
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Loading Libraries
+
+```{r}
+packages <- c("tidyverse", "REdaS", "psych", "FactoMineR", "factoextra", "writexl")
+#lapply(packages, library, character.only = TRUE)
+```
+
+```{r, include=FALSE}
+lapply(packages, library, character.only = TRUE)
+```
+
+### Loading and Preparing Data
+
+```{r}
+eyes <- read.table("F:/open_git/bee_eyes/data/eyes_df.txt", header = TRUE, sep = "\t")
+```
+
+#### Converting the FamHab column to a factor
+```{r}
+eyes$FamHab <- as.factor(eyes$FamHab)
+```
+
+#### Data summary
+```{r}
+summary(eyes)
+```
+### Principal Component Analysis (PCA)
+
+##### Bartlett's test to check the adequacy of factor analysis
+```{r}
+cortest.bartlett(eyes[, 3:8])
+```
+
+### Calculating Principal Components
+
+#### PCA without Rotation
+```{r}
+components_without_rotation <- principal(eyes[, 3:8], nfactors=2, rotate="none", scores=TRUE)
+```
+#### Visualizing the components
+```{r}
+components_without_rotation
+```
+### Biplot (No Rotation)
+```{r}
+biplot(components_without_rotation)
+```
+
+```{r}
+components_without_rotation_1 <- PCA(eyes[, 3:8], scale.unit = TRUE, graph = TRUE, ncp=2)
+```
+
+
+```{r}
+summary(components_without_rotation_1)
+```
+### PCA Metrics
+
+#### eingvalues
+```{r}
+components_without_rotation$values
+```
+#### Variability Explained
+```{r}
+PC1 <- components_without_rotation$Vaccounted[2, 1]
+PC2 <- components_without_rotation$Vaccounted[2, 2]
+PC1; PC2
+
+```
+#### Factor Loadings and Scores
+```{r}
+components_without_rotation$weights
+components_without_rotation$loadings
+```
+### Factorial Scores and Ranking
+
+#### Calculating Factor Scores
+```{r}
+eyes_without_rotation <- eyes
+eyes_without_rotation$scores_PCA1 <- components_without_rotation$scores[, 1]
+eyes_without_rotation$scores_PCA2 <- components_without_rotation$scores[, 2]
+```
+#### Creating a Ranking Based on PCA Scores
+```{r}
+eyes_without_rotation <- eyes_without_rotation %>% 
+  mutate(ranking = (PC1 * scores_PCA1) + (PC2 * scores_PCA2)) %>% 
+  arrange(desc(ranking))
+
+head(eyes_without_rotation)
+```
+#### Exporting the Ranking to Exce
+```{r}
+write_xlsx(eyes_without_rotation, "F:/open_git/bee_eyes/results/ranking_pca.xlsx")
+```
+### Custom Biplot Visualization
+```{r}
+biplot(components_without_rotation, pch = c(21, 21, 21, 21, 21), 
+       col = c("orange", "purple", "brown3", "darkseagreen3", "dodgerblue3"), 
+       group = eyes$FamHab, ylim.s = c(-4, 4), xlim.s = c(-4, 4))
+
+legend("bottomleft", fill = c("orange", "purple", "brown3", "darkseagreen3", "dodgerblue3"), 
+       horiz = FALSE, c("ColDiu", "ColFac", "ColCre", "HalCre", "HalDiu"), cex = 1, bty = "n")
+```
