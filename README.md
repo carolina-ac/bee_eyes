@@ -14,15 +14,15 @@ Caetano, C., Araújo, P., Schlindwein, C., Alves-Dos-Santos, I., & Mota, T. (202
 1. Principal Component Analysis (PCA)
 Objective: Reduce the dimensionality of the dataset while maintaining the variance to better understand the key factors driving variations in eye morphology.
 Methods: Standardized the data using StandardScaler and applied PCA to extract the first two principal components.
-Visualization: A biplot is generated, showing the influence of different variables (e.g., number of facets, focal length) on the principal components.
+Visualization: A biplot is generated, showing the influence of different variables (e.g., number of facets, size of facets ) on the principal components.
 
 3. Clustering Analysis
-Objective: Identify natural groupings in the data to differentiate between crepuscular and diurnal bees based on eye morphology.
+Objective: Identify natural groupings in the data to differentiate between crepuscular, facultative crepuscular, and diurnal bees based on eye morphology.
 Methods: Applied hierarchical and K-Means clustering to the standardized data.
 Visualization: Dendrograms and scatter plots are used to visualize the clusters formed.
 
 ### Future Work
-* GAMLSS: Planned analysis to model the relationship between morphological measurements and environmental factors, adjusting for non-normal distributions.
+* GAMLSS: Planned analysis to model the relationship between morphological measurements and temporal habit, adjusting for non-normal distributions.
 * GLMM: Planned analysis to incorporate random effects, modeling the hierarchical structure of the data (e.g., species nested within families).
   
 ### Repository Structure
