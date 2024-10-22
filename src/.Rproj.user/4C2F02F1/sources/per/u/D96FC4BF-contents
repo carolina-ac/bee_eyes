@@ -1,0 +1,110 @@
+#################################################
+#     LOADING IMPORTANT LIBRARIES AND DATA
+#################################################
+
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(gridExtra)
+
+# Root Directory
+root_directory <- "F:/open_git/bee_eyes"
+
+# Load data
+eyes <- read_delim(paste0(root_directory, "/data/eyes_df.txt"), delim = "\t")
+
+#################################################
+# DESCRIPTIVE ANALYSIS FOR NUMERICAL VARIABLES 
+#################################################
+
+# Calculate basic statistics for numeric columns only
+numeric_cols <- select_if(eyes, is.numeric)
+description <- summary(numeric_cols)
+print(description)
+
+# Plot histograms for numeric variables
+pdf(paste0(root_directory, "/results/histogram_numeric.pdf"))
+g <- ggpairs(numeric_cols)
+print(g)
+dev.off()
+
+# Calculate the number and percentage of missing values in each column
+missing_counts <- sum(is.na(eyes))
+missing_percentage <- (missing_counts / nrow(eyes)) * 100
+missing_df <- data.frame(Count = missing_counts, Percentage = missing_percentage)
+print(missing_df)
+
+# Compute the correlation matrix for numeric variables
+correlation_matrix <- cor(numeric_cols)
+pdf(paste0(root_directory, "/results/correlation_matrix.pdf"))
+heatmap(correlation_matrix, main = "Correlation Matrix", Colv = NA, Rowv = NA, scale = "column", 
+        margins = c(5,10), col = colorRampPalette(c("navyblue", "white", "firebrick3"))(n = 200))
+dev.off()
+
+# Check for and remove duplicate rows
+duplicates_before <- sum(duplicated(eyes))
+eyes <- distinct(eyes)
+duplicates_after <- sum(duplicated(eyes))
+cat("Duplicates before removal: ", duplicates_before, "\nDuplicates after removal: ", duplicates_after, "\n")
+
+# Use boxplots to visualize outliers in numeric variables
+pdf(paste0(root_directory, "/results/boxplots_with_obs.pdf"))
+for(column in colnames(numeric_cols)) {
+  p <- ggplot(eyes, aes_string(x = column, y = column, color = 'FamHab')) +
+    geom_boxplot(outlier.shape = NA) +
+    geom_jitter(aes(color = FamHab), size = 2, width = 0.2) +
+    labs(title = paste("Boxplot with Observations of", column)) +
+    theme_minimal()
+  print(p)
+}
+dev.off()
+
+#################################################
+# DESCRIPTIVE ANALYSIS FOR CATEGORICAL VARIABLES 
+#################################################
+
+# Frequency Counts
+frequency_counts <- table(eyes$FamHab)
+print("Frequency Counts:\n")
+print(frequency_counts)
+
+# Proportions or Percentages
+category_percentages <- prop.table(table(eyes$FamHab)) * 100
+print("Category Percentages:\n")
+print(category_percentages)
+
+# Bar Charts
+pdf(paste0(root_directory, "/results/countplot_FamHab.pdf"))
+ggplot(eyes, aes(x = FamHab, fill = FamHab)) +
+  geom_bar() +
+  labs(title = "Distribution of FamHab Categories") +
+  theme_minimal()
+dev.off()
+
+# Cross-Tabulation
+cross_tab <- table(eyes$FamHab, eyes$Species)
+print("Cross-Tabulation between FamHab and Species:\n")
+print(cross_tab)
+
+# Chi-Square Test
+chi_square_test <- chisq.test(cross_tab)
+print(paste("Chi-Square Statistic:", chi_square_test$statistic, ", P-value:", chi_square_test$p.value))
+
+# Pie Chart
+pdf(paste0(root_directory, "/results/piechart_FamHab.pdf"))
+pie(table(eyes$FamHab), labels = prop.table(table(eyes$FamHab)) * 100,
+    main = "Pie Chart of FamHab Categories")
+dev.off()
+
+# Mode
+mode_category <- names(which.max(table(eyes$FamHab)))
+print(paste("Mode category in FamHab: ", mode_category))
+
+# Stacked Bar Chart
+pdf(paste0(root_directory, "/results/cross_tab_FamHab.pdf"))
+ggplot(data = as.data.frame(cross_tab), aes(x = Var1, y = Freq, fill = Var2)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Stacked Bar Chart of FamHab by Species") +
+  theme_minimal()
+dev.off()

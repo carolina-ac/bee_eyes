@@ -1,0 +1,92 @@
+########################################
+#
+#      LOADING LIBRARIES 
+#
+########################################
+
+library(tidyverse)
+library(REdaS)
+library(psych)
+library(FactoMineR)
+library(factoextra)
+
+## Load data: 
+eyes <- read.table("eyes_df.txt", header = TRUE, sep = "\t")
+
+eyes$FamHab <- as.factor(eyes$FamHab)
+
+summary(eyes)
+
+########################################
+#
+#    PRINCIPAL COMPONENT ANALYSIS
+#
+########################################
+
+## calculating Bartlett's Test using the 'psych' package
+cortest.bartlett(eyes[,3:8])
+
+## calculating components
+components_without_rotation <- principal(eyes[,3:8], nfactors=2, rotate="none", scores=T)
+components_without_rotation
+
+## biplot (no rotation)
+biplot(components_without_rotation) 
+
+# Is there a more visual way to view the graph?
+# using FactoMineR library
+components_without_rotation_1 <- PCA(eyes[,3:8], scale.unit = T, graph = T, ncp=2)
+summary(components_without_rotation_1)
+
+# Can we see this visually? What's the percentage contribution of each component?
+# using factoextra library
+fviz_screeplot(components_without_rotation_1)
+
+## eigenvalues
+components_without_rotation$values
+
+## % of variability explained
+components_without_rotation$Vaccounted
+PC1 <- components_without_rotation$Vaccounted[2,1]; PC1
+PC2 <- components_without_rotation$Vaccounted[2,2]; PC2
+
+## factorial scores
+components_without_rotation$weights
+
+## factor loadings (loadings in R)
+components_without_rotation$loadings
+
+
+## calculating factors
+## extracting scores 
+eyes_without_rotation <- eyes
+eyes_without_rotation$scores_PCA1 <- components_without_rotation$scores[,1]
+eyes_without_rotation$scores_PCA2 <- components_without_rotation$scores[,2]
+
+
+## factorial scores
+components_without_rotation$weights
+
+## factor loadings (loadings in R)
+components_without_rotation$loadings
+
+
+## calculating factors
+eyes_without_rotation <- eyes
+eyes_without_rotation$scores_PCA1 <- components_without_rotation$scores[,1]
+eyes_without_rotation$scores_PCA2 <- components_without_rotation$scores[,2]
+
+## creating ranking
+eyes_without_rotation <- eyes_without_rotation %>% 
+  mutate(ranking = (PC1*scores_PCA1) + (PC2*scores_PCA2)) %>% 
+  arrange(desc(ranking))
+
+## exporting the table to Excel
+library("writexl")
+write_xlsx(eyes_without_rotation,"F:/git_aberto/bee_eyes/ranking_pca.xlsx")
+
+## customize the graph
+biplot(components_without_rotation, pch = c(21, 21, 21, 21, 21), col = c("orange",  "purple", "brown3",  "darkseagreen3", "dodgerblue3"), group = eyes$FamHab, ylim.s = c(-4, 4), xlim.s = c(-4, 4))
+legend ("bottomleft", fill=c("orange",  "purple", "brown3",  "darkseagreen3", "dodgerblue3"), horiz = F, 
+        c("ColDiu", "ColFac", "ColCre", "HalCre", "HalDiu"),
+        cex= 1, bty="n")
