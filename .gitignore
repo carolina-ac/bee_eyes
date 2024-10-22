@@ -180,3 +180,4 @@ golaco_redcap/python/checking_databank/src/config.py
 
 # Ignorar todo o conteúdo em diretórios específicos
 bee_eyes/src/*
+bee_eyes/R.project.user/*
