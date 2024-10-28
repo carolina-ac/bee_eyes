@@ -170,7 +170,6 @@ golaco_redcap/python/checking_databank/src/config.py
 #Ignorar arquivos específicos
 *pdf
 *png
-*txt
 *csv
 *xls
 *xlsx
