@@ -1,4 +1,4 @@
-# GAMLSS Analysis of Bee Eye Data
+# GAMLSS Analysis of Bee Eyes
 
 ### Loading Libraries
 

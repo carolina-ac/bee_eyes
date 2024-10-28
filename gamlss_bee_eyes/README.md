@@ -1,6 +1,6 @@
-# Incremental Modeling and GAMLSS Prediction Analysis for Bee Eye Data
+# Incremental Modeling and Predictive Analysis of Bee Eye Data Using GAMLSS
 
-This repository contains code for incremental modeling and visualization of bee eye data using mixed models with the `gamlss` package. The analysis workflow includes model fitting, AIC-based model selection, diagnostic plots, and visualizations of observed versus predicted values, with distinct lines for each `group level`.
+This repository contains code for incremental modeling and visualization of bee eye data using mixed models with the `gamlss` package. The analysis workflow includes model fitting, AIC-based model selection, diagnostic plots, and visualizations of observed versus predicted values, with distinct lines for each `group level`, and the addition of a random variable to capture inherent variability not explained by fixed effects.
 
 The `gamlss` package is particularly suitable for small datasets, as it allows flexible modeling of distributional parameters (mean, scale, and shape) using covariates, which can help capture more complex data patterns even with limited observations.
 
