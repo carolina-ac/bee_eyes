@@ -177,6 +177,7 @@ plot_observed_vs_predicted <- function(model, data, x_var, y_var, group_var = "H
 plot_observed_vs_predicted(model = m4, data = eyes, x_var = "di", y_var = "vf", group_var ="Habit")
 
 ```
+
 # Additional Plots
 
 ```{r}

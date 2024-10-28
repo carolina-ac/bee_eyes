@@ -376,7 +376,8 @@ for each level of Habit.
     ## generated.
 
 ![](gamlss_bee_eyes_files/figure-markdown_strict/unnamed-chunk-8-1.png)
-\# Additional Plots
+
+# Additional Plots
 
     # Plot term plot for final model
     term.plot(m4)
